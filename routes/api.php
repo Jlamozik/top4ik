@@ -20,9 +20,9 @@ Route::post('/signin', 'MAGA@signIn');
 Route::post('/rec', 'MAGA@password_recovery');
 Route::post('/logout', 'MAGA@logout');
 
-
-
-
+Route::post('/additem', 'ProductController@addItem');
+Route::post('/removeitem', 'ProductController@removeItem');
+Route::post('/changeitem', 'ProductController@changeItem');
 
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
