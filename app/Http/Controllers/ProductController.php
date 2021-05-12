@@ -4,14 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
-use App;
+use App\Product;
 
 class ProductController extends Controller
 {
     public function addItem(Request $req)
 	{
-		$validate = Validator::make($req->all(), [
+		$validator = Validator::make($req->all(), [
 			"id" => 'required|unique:products',
 			"name" => 'required',
 			"count" => 'required',
@@ -26,8 +25,8 @@ class ProductController extends Controller
 			]);
 		}
 
-		Products::create($req->all());
-		return respone()->json("Все ок!!");
+		Product::create($req->all());
+		return response()->json("Все ок!!");
 	}
 
 	public function removeItem(Request $req)
@@ -36,23 +35,13 @@ class ProductController extends Controller
 			"id" => "required",
 		]);
 
-		$product = Products::where("id", $req->id)->first();
+		$product = Product::where("id", $req->id)->first();
 
 
 		if ($product) 
 		{
-			$validator = Validator::make($req->all(), [
-			"id" => "required",
-			]);
-
-			if($validator->fails())
-			{
-				return response()->json(
-				[
-				"message" => $validator->errors(),
-				]);
-			}
 			$product->delete();
+			return response()->json("Неплохо");
 		}
 	}
 
@@ -62,7 +51,7 @@ class ProductController extends Controller
 		$validator = Validator::make($req->all(), [
 			"id" => 'required',
 			"name" => "required",
-			"quantity" => "required",
+			"count" => "required",
 			"price" => "required",
 		]);
 
@@ -74,11 +63,11 @@ class ProductController extends Controller
 				]);
 		}
 
-		$product = Products::where("id", $req->id)->first();
+		$product = Product::where("id", $req->id)->first();
 
 		if($product)
 		{
-			if($req->name && $product->name)
+			if($req->id && $product->id)
 			{
 				$product->quantity = $req->quantity;
 				$product->price = $req->price;
